@@ -4,7 +4,7 @@ close all
 clc
    
 %%%%%%%%%%%%%%%%%%%%%%%%% TIEMPO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tf=7;             % Tiempo de simulación en segundos (s)
+tf=8.5;             % Tiempo de simulación en segundos (s)
 ts=0.1;            % Tiempo de muestreo en segundos (s)
 t=0:ts:tf;         % Vector de tiempo
 N= length(t);      % Muestras
@@ -19,7 +19,7 @@ phi= zeros (1, N+1);      % Orientación del robot en radiaanes (rad)
 %Damos valores a nuestro punto inicial de posición y orientación
 x1(1)=0;  %Posición inicial eje x
 y1(1)=0;  %Posición inicial eje y
-phi(1)=pi+(pi/6); %30° %Orientación inicial del robot 
+phi(1)=0; %Angulo Inicial
 
 %%%%%%%%%%%%%%%%%%%%% PUNTO DE CONTROL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Inicializamos el punto de control 
@@ -36,12 +36,14 @@ hy(1)= y1(1);       % Posición del punto de control en el eje (Y) metros (m)
 v = 1*ones(1,N); % Velocidad lineal de referencia (m/s)
 w = 0*ones(1,N); % Velocidad angular de referencia (rad/s)
 
-v(11:20) = 0;
-v(31:40) = 0;
-v(51:60) = 0;
-w(11:20) = (13*pi)/18; %130°
-w(31:40) = -(5*pi)/6; %-110°
-w(51:60) = -(4*pi)/9; %-80°
+v(1:10) = 0;
+v(21:30) = 0;
+v(41:50) = 0;
+v(61:70) = 0;
+w(1:10) = pi/6; %30°
+w(21:30) = (13*pi)/18; %130°
+w(41:50) = -(5*pi)/6; %-110°
+w(61:70) = -(4*pi)/9; %-80°
 
 
 
@@ -86,8 +88,8 @@ grid on; % Mostrar líneas de cuadrícula en los ejes
 box on; % Mostrar contorno de ejes
 xlabel('x(m)'); ylabel('y(m)'); zlabel('z(m)'); % Etiqueta de los eje
 
-view([135 35]); % Orientacion de la figura
-axis([-3 3 -3 3 0 2]); % Ingresar limites minimos y maximos en los ejes x y z [minX maxX minY maxY minZ maxZ]
+view([-0.1 35]); % Orientacion de la figura
+axis([-4 4 -4 4 0 1]); % Ingresar limites minimos y maximos en los ejes x y z [minX maxX minY maxY minZ maxZ]
 
 % b) Graficar robots en la posicion inicial
 scale = 4;
