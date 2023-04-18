@@ -2,10 +2,10 @@
 clear all
 close all
 clc
-
+   
 %%%%%%%%%%%%%%%%%%%%%%%%% TIEMPO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tf=4;             % Tiempo de simulación en segundos (s)
-ts=0.01;            % Tiempo de muestreo en segundos (s)
+tf=7;             % Tiempo de simulación en segundos (s)
+ts=0.1;            % Tiempo de muestreo en segundos (s)
 t=0:ts:tf;         % Vector de tiempo
 N= length(t);      % Muestras
 
@@ -19,7 +19,7 @@ phi= zeros (1, N+1);      % Orientación del robot en radiaanes (rad)
 %Damos valores a nuestro punto inicial de posición y orientación
 x1(1)=0;  %Posición inicial eje x
 y1(1)=0;  %Posición inicial eje y
-phi(1)=0; %Orientación inicial del robot 
+phi(1)=pi+(pi/6); %30° %Orientación inicial del robot 
 
 %%%%%%%%%%%%%%%%%%%%% PUNTO DE CONTROL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Inicializamos el punto de control 
@@ -33,22 +33,25 @@ hy(1)= y1(1);       % Posición del punto de control en el eje (Y) metros (m)
 
 %%%%%%%%%%%%%%%%%%%%%% VELOCIDADES DE REFERENCIA %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-v = 0.5*ones(1,N); % Velocidad lineal de referencia (m/s)
+v = 1*ones(1,N); % Velocidad lineal de referencia (m/s)
 w = 0*ones(1,N); % Velocidad angular de referencia (rad/s)
+
+v(11:20) = 0;
+v(31:40) = 0;
+v(51:60) = 0;
+w(11:20) = (13*pi)/18; %130°
+w(31:40) = -(5*pi)/6; %-110°
+w(51:60) = -(4*pi)/9; %-80°
+
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%% BUCLE DE SIMULACION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for k=1:N 
-    
+
     %Aplico la integral a la velocidad angular para obtener el angulo "phi" de la orientación
-    if mod(k*0.5, 1) == 0 % Si el robot ha recorrido 0.5 metros (lado del cuadrado)
-        if mod(k*0.5/1, 2) == 0 % Si ha pasado un segundo par
-            w(k) = -pi/2;
-        else % Si ha pasado un segundo impar
-            w(k) = pi/2;
-        end
-    end
     phi(k+1)=phi(k)+w(k)*ts; % Integral numérica (método de Euler)
            
    %%%%%%%%%%%%%%%%%%%%% MODELO CINEMATICO %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,8 +69,6 @@ for k=1:N
     hy(k+1)=y1(k+1);
 
 end
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% SIMULACION VIRTUAL 3D %%%%%%%%%%%%%%%%%%%%%%%%%%%%
